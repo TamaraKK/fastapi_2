@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Request
-from schemas import Item
+from schemas import Book
+
 app = FastAPI()
 
 
@@ -11,6 +12,7 @@ def home():
 def get_item(p: int, q:str = None):
     return {'key': p, 'q':q}
 
-@app.post("/items/")
-async def create_item(item: Item, request: Request):
-    return {"item": item, "client_host": request.client.host}
+
+@app.post('/create_book')
+def create_book(item: Book):
+    return item

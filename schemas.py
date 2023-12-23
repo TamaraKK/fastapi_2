@@ -1,9 +1,11 @@
 from pydantic import BaseModel
+from datetime import date
 
-class Item(BaseModel):
-    name: str
-    description: str = None
+class Book(BaseModel):
+    title: str
+    author: str
+    genres: str = None
+    date: date
 
 
 
-    
