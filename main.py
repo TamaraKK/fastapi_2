@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request, Query, Path, Body
-from schemas import Book, Author
+from schemas import Book, Author, BookOut
 from typing import List
 
 app = FastAPI()
@@ -17,15 +17,21 @@ def get_item(p: int, q:str = None):
 def create_author(author: Author = Body(..., embed=True)):
     return {'author': author}
 
-@app.post('/create_book')
-def create_book(item: Book, author: Author, quantity: int = Body(...)):
-    return {'item': item, 'author': author, 'quantity': quantity}
+# @app.post('/create_book')
+# def create_book(item: Book, author: Author, quantity: int = Body(...)):
+#     return {'item': item, 'author': author, 'quantity': quantity}
+
+@app.post('/create_book', response_model=BookOut)
+def create_book(item:Book):
+    return BookOut(**item.dict(), id=3)
+
+# ,response_model_exclude_unset=True, response_model_exclude={'pages', 'date'}
 
 @app.get('/get_book')
 def get_book(q:List[str] = Query(...,  description='search book')):
     return q
 
-@app.get('/book/{id}')
+@app.get('/get_single_book/{id}')
 def get_single_book(id:int = Path(..., gt=1, le=20), pages: int = Query(None, gt=10, le=500)):
     return {'id': id, 'pages': pages}
 

@@ -20,9 +20,11 @@ class Author(BaseModel):
 class Book(BaseModel):
     title: str
     author: str
-    genres: List[Genre] = None
+    genres: List[Genre] = []
     date: date
     pages: int
 
 
+class BookOut(Book):
+    id:int 
 
