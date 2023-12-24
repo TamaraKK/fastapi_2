@@ -1,5 +1,6 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Query
 from schemas import Book
+from typing import List
 
 app = FastAPI()
 
@@ -16,3 +17,15 @@ def get_item(p: int, q:str = None):
 @app.post('/create_book')
 def create_book(item: Book):
     return item
+
+@app.get('/get_book')
+def get_book(q:List[str] = Query(...,  description='search book')):
+    return q
+
+
+
+
+
+
+
+
