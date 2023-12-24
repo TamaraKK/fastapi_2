@@ -1,5 +1,5 @@
-from fastapi import FastAPI, Request, Query
-from schemas import Book
+from fastapi import FastAPI, Request, Query, Path, Body
+from schemas import Book, Author
 from typing import List
 
 app = FastAPI()
@@ -9,20 +9,25 @@ app = FastAPI()
 def home():
     return {'key':'Hello'}
 
-@app.get('/{pk}')
+@app.get('/{p}')
 def get_item(p: int, q:str = None):
     return {'key': p, 'q':q}
 
+@app.post('/create_author')
+def create_author(author: Author = Body(..., embed=True)):
+    return {'author': author}
 
 @app.post('/create_book')
-def create_book(item: Book):
-    return item
+def create_book(item: Book, author: Author, quantity: int = Body(...)):
+    return {'item': item, 'author': author, 'quantity': quantity}
 
 @app.get('/get_book')
 def get_book(q:List[str] = Query(...,  description='search book')):
     return q
 
-
+@app.get('/book/{id}')
+def get_single_book(id:int = Path(..., gt=1, le=20), pages: int = Query(None, gt=10, le=500)):
+    return {'id': id, 'pages': pages}
 
 
 
