@@ -1,8 +1,28 @@
-from fastapi import FastAPI, Request, Query, Path, Body
+from fastapi import FastAPI, Request, Query, Path, Body, UploadFile, File
 from schemas import Book, Author, BookOut
 from typing import List
+import shutil
 
 app = FastAPI()
+
+
+
+@app.post('/upload_file')
+async def upload_file(file:UploadFile = File(...)):
+    with open(f'{file.filename}', 'wb') as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    return {'file_name': file.filename}
+
+
+@app.post('/upload_img')
+async def upload_img(files: List[UploadFile] = File(...)):
+    for img in files:
+        with open(f'{img.filename}', 'wb') as buffer:
+            shutil.copyfileobj(img.file, buffer)
+
+    return {'file_name': 'good'}
+
 
 
 @app.get('/home')
